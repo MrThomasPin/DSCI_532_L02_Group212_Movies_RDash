@@ -81,8 +81,7 @@ chart_type <- dccRadioItems(
   id='chart-type',
   options=list(
     list('label'='Jitter', 'value'='jitter'),
-    list('label'='Line (Median)', 'value'='line'),
-    list('label'='Line (Total)', 'value'='total')
+    list('label'='Line (Median)', 'value'='line')
   ),
   value='jitter',
   labelStyle=list(
@@ -157,7 +156,7 @@ make_graph_1 <- function(years=c(2000, 2010),
                          text = paste('</br> Movie: ', title,
                                       '</br> Year: ', year,
                                       '</br> Distributor: ', distributor,
-                                      '</br>', y_label,"(M): ", round(!!sym(yaxis_to_plot), 2)))) +
+                                      '</br>', y_label,"(M): ", round(!!sym(yaxis_to_plot), 1)))) +
     geom_jitter(alpha=.5, size =0.7, color= "#ff8000") +
     scale_x_continuous(breaks = unique(data$year))+
     scale_y_continuous(labels = comma, trans='log10') +
@@ -174,29 +173,11 @@ make_graph_1 <- function(years=c(2000, 2010),
     group_by(year) %>%
     mutate(median_metric = median(!!sym(yaxis_to_plot))) %>% 
     ggplot(aes(x=year, y=median_metric, group=1, text = paste('</br> Year: ', year,
-                                                              '</br>Average ', y_label,"(M): ", round(median_metric, 2)))) +
+                                                              '</br>Average ', y_label,"(M): ", round(median_metric, 1)))) +
     scale_x_continuous(breaks = unique(data$year))+
     geom_line(colour = "#cc6600") +
     scale_y_continuous(labels = comma)+
     geom_point()+
-    ggtitle(paste0("Change in ", y_label, " Over Time", title_end))+
-    xlab("Year")+
-    ylab(paste0("Worldwide ", y_label, " (Millions)"))+
-    theme(panel.border = element_blank(), panel.grid.major = element_blank(),panel.background = element_blank(),
-          panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
-          axis.text.x = element_text(angle = 45,color='#0d0d0d'), plot.title = element_text(hjust = 0.5, size=18),
-          axis.title.x = element_blank(),axis.text.y = element_text(color='#0d0d0d'))
-  
-  p3 <- data %>% 
-    group_by(year) %>%
-    mutate(total_metric = sum(!!sym(yaxis_to_plot))) %>% 
-    ggplot(aes(x=year, y=total_metric, group=1, text = paste('</br> Year: ', year,
-                                                              '</br>Total ', y_label,"(M): ", round(total_metric, 2)))) +
-    scale_x_continuous(breaks = unique(data$year))+
-    geom_line(colour = "#cc6600") +
-    scale_y_continuous(labels = comma)+
-    geom_point()+
-    #geom_text(x=2017, y=)+
     ggtitle(paste0("Change in ", y_label, " Over Time", title_end))+
     xlab("Year")+
     ylab(paste0("Worldwide ", y_label, " (Millions)"))+
@@ -207,9 +188,6 @@ make_graph_1 <- function(years=c(2000, 2010),
   
   if(type == "jitter"){
     ggplotly(p1, tooltip = "text") %>% config(displayModeBar = FALSE)
-  }
-  else if(type == "total"){
-    ggplotly(p3, tooltip = "text") %>% config(displayModeBar = FALSE)
   }
   else{
     ggplotly(p2, tooltip = "text") %>% config(displayModeBar = FALSE)
@@ -267,7 +245,7 @@ make_graph_2 <- function(years=c(1980, 2017),
                          text = paste('</br> Movie: ', title,
                                       '</br> Year: ', year,
                                       '</br> Distributor: ', distributor,
-                                      '</br>', y_label,"(M): ", round(!!sym(yaxis_to_plot), 2)))) +
+                                      '</br>', y_label,"(M): ", round(!!sym(yaxis_to_plot), 1)))) +
     geom_bar(stat = 'identity',fill = "#ffcc99") +
     #scale_x_continuous(breaks = unique(data$year))+
     scale_y_continuous(labels = comma) +
@@ -331,7 +309,7 @@ make_graph_3 <- function(yaxis="worldwide_gross", inf="adj",
                          text = paste('</br> Movie: ', title,
                                       '</br> Year: ', year,
                                       '</br> Distributor: ', distributor,
-                                      '</br>', y_label,"(M): ", round(!!sym(yaxis_to_plot), 2)))) +
+                                      '</br>', y_label,"(M): ", round(!!sym(yaxis_to_plot), 1)))) +
     geom_bar(stat = 'identity', position="dodge",fill = "#ffcc99") +
     #scale_x_continuous(breaks = unique(data$year))+
     scale_y_continuous(labels = comma) +

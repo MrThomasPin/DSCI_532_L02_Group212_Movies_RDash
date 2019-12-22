@@ -70,6 +70,8 @@ df_movies_raw_1980 <- df_movies_raw_1980 %>%
 
 df_movies_raw <- rbind(df_movie_raw_2017, df_movies_raw_1980)
 
+#df_movies_raw <- df_movies_raw %>% disin
+
 #change the column types for tix price 
 df_tix_price$year <- as.numeric(df_tix_price$year)
 df_tix_price$price <- str_remove(df_tix_price$price, "[$]")
@@ -106,9 +108,11 @@ df_movies_raw <- df_movies_raw %>%
 df_movies_raw <- df_movies_raw %>% 
   select(title, year, distributor,
          worldwide_gross, worldwide_profit_gross, worldwide_adj, worldwide_profit_adj, worldwide_bits,        
-         production_budget, production_budget_adj)
+         production_budget, production_budget_adj) %>% 
+  distinct(title, .keep_all = TRUE)
 
 df_movies_clean <- df_movies_raw
+
 
 write_csv(df_movies_clean, "../data/movies_data_clean_new.csv")
 
