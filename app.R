@@ -29,6 +29,14 @@ df_movies <- read_csv("data/movies_data_clean_new.csv") %>%
   mutate(worldwide_bits = worldwide_bits/1000000) %>% 
   mutate(production_budget = production_budget/1000000) %>% 
   mutate(production_budget_adj = production_budget_adj/1000000)
+##################################################################
+# Need function for negative log credit to Brian Diggs 
+#https://stackoverflow.com/questions/11053899/how-to-get-a-reversed-log10-scale-in-ggplot2
+##################################################################
+weird <- scales::trans_new("signed_log",
+                           transform=function(x) sign(x)*log(abs(x)),
+                           inverse=function(x) sign(x)*exp(abs(x)))
+
 
 ##################################################################
 # Selection components
@@ -126,6 +134,7 @@ make_graph_1 <- function(years=c(2000, 2010),
     title_end = " - Not Adjusted for inflation"
   }
   
+  
   # if inflation selected, use adjusted values
   if(inf=="adj"){
     if(yaxis =="worldwide_gross"){
@@ -140,6 +149,16 @@ make_graph_1 <- function(years=c(2000, 2010),
   }
   else yaxis_to_plot = yaxis
   
+  if(yaxis == "worldwide_bits"){
+    title_end = ""
+  }
+  
+  if(yaxis %in% c("worldwide_profit_gross", "worldwide_profit_adj")){
+    scaler = c(-100, -10, -1, -.1, .1 , 10, 100, 1000)
+  }
+  else scaler = c(10, 100, 1000)
+  
+  
   y_label <- yaxisKey$label[yaxisKey$value==yaxis_to_plot]
   
   #filter our data based on the year/continent selections
@@ -152,6 +171,7 @@ make_graph_1 <- function(years=c(2000, 2010),
   # see: https://github.com/r-lib/rlang/issues/116
   # originally from Kate S's example
   
+  
   #jitter plot
   p1 <- ggplot(data, aes(x=year, y=!!sym(yaxis_to_plot), colour=year, 
                          text = paste('</br> Movie: ', title,
@@ -160,7 +180,8 @@ make_graph_1 <- function(years=c(2000, 2010),
                                       '</br>', y_label,"(M): ", round(!!sym(yaxis_to_plot), 2)))) +
     geom_jitter(alpha=.5, size =0.7, color= "#ff8000") +
     scale_x_continuous(breaks = unique(data$year))+
-    scale_y_continuous(labels = comma, trans='log10') +
+    scale_y_continuous(labels = comma, trans=weird, 
+                       breaks = scaler) +
     xlab("Year") +
     ylab(paste0("Worldwide ", y_label, " (Millions) - log(10) scale")) +
     geom_line(aes(x=year, y=median(!!sym(yaxis_to_plot)))) +
@@ -196,7 +217,6 @@ make_graph_1 <- function(years=c(2000, 2010),
     geom_line(colour = "#cc6600") +
     scale_y_continuous(labels = comma)+
     geom_point()+
-    #geom_text(x=2017, y=)+
     ggtitle(paste0("Change in ", y_label, " Over Time", title_end))+
     xlab("Year")+
     ylab(paste0("Worldwide ", y_label, " (Millions)"))+
@@ -394,6 +414,7 @@ app$layout(
               dccMarkdown("**Select main chart type:**"),
               chart_type,
               dccMarkdown("This application depicts the profit made by movies from 1980 to 2017."),
+              dccMarkdown("*2017 movie data is incomplete."),
               dccMarkdown("An unconventional metric **_Butts in Seats_** is introduced. It indicates the estimated attendance of a movie.")
             ), style = list('background-color'='#94b8b8', 'columnCount'=1, 'width'='20%','padding'= '10px')
           ),

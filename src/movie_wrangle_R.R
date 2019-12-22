@@ -37,7 +37,7 @@ df_movie_raw_2017<- df_movie_raw_2017 %>%
 
 
 df_movie_raw_2017 <- df_movie_raw_2017 %>% 
-  filter(year >= 2011) %>% 
+  filter(year >= 1980) %>% 
   select(original_title, revenue, budget, Distributor, year) %>% 
   clean_names() %>% 
   rename(title = original_title, 
