@@ -14,7 +14,7 @@ df_movies_raw_1980 <- read_csv("../data/movies_clean_data_python.csv")
 df_tix_price <- read_csv("../data/movie_ticket_prices.csv")
 
 #https://www.in2013dollars.com/us/inflation/1980?amount=1
-df_inf <-read_csv("../data/inflation_data_1980_to_2010.csv")
+df_inf <-read_csv("../data/inflation_data_1975_to_2019.csv")
 
 ##https://www.kaggle.com/danofer/movies-data-clean/output Data from
 df_movie_raw_2017 <- read_csv("../data/movies_tmdbMeta.csv")
@@ -37,7 +37,7 @@ df_movie_raw_2017<- df_movie_raw_2017 %>%
 
 
 df_movie_raw_2017 <- df_movie_raw_2017 %>% 
-  filter(year >= 1980) %>% 
+  filter(year >= 1975) %>% 
   select(original_title, revenue, budget, Distributor, year) %>% 
   clean_names() %>% 
   rename(title = original_title, 
@@ -104,12 +104,22 @@ df_movies_raw <- df_movies_raw %>%
          worldwide_adj = worldwide_gross/amount, 
          worldwide_profit_adj = worldwide_profit_gross/amount)
 
+duplicate_titles <- c("10,000 BC", "28 Days Later", "Adaptation", "Aeon Flux","	Alpha and Omega 3D", "Barbershop 2:  Back in Business",  "Battlefield Earth", "Beetlejuice", "Blade 2", "Borat", "Chéri", "	Cry_Wolf", "	Dead Poets Society", "DÈj‡ Vu", "Dude, Where's My Car?", "	Dumb & Dumber", "Dungeons and Dragons", "Fantasia 2000 (Theatrical Release)", "Halloween 3: Season of the Witch", "Hellboy 2: The Golden Army", "	Herbie Fully Loaded", "House of 1,000 Corpses", "I Now Pronounce You Chuck & Larry", "I'm Not There.", "	Interview with the Vampire", "Jackass Number Two", "Jane Austen's Mafia!", "Jeepers Creepers II", "Jurassic Park 3", "Kama Sutra - A Tale of Love","Kill Bill: Vol. 1", "Kill Bill: Vol. 2", "Kiss Kiss Bang Bang", "Lara Croft: Tomb Raider: The Cradle of Life", "Licence to Kill", "Life or Something Like It", "Love & Basketball", "Mad Max 2", "	Men in Black II", "Mission: Impossible 2", "Moulin Rouge!", "Mouse Hunt", "Mr. & Mrs. Smith", "National Lampoon's Van Wilder", "Resident Evil: Afterlife 3D", "Speed II: Cruise Control", "Star Wars: Episode I - The Phantom Menace", "Star Wars: Episode II - Attack of the Clones", "Star Wars: Episode III - Revenge of the Sith", "Step Up 2 the Streets", "	The 40 Year Old Virgin", "The Adventures of Sharkboy and Lavagirl in 3-D", "The Break Up", "The Empire Strikes Back", "The Forgotten", "	The Informant!", "The Taking of Pelham 1 2 3", "The Work and the Glory: American Zion", "	The X Files: Fight the Future", "Yours, Mine & Ours", "Yu-Gi-Oh! The Movie", "Про любоff", "포화 속으로", "美人鱼", "Zathura: A Space Adventure", "Who Framed Roger Rabbit", "Urban Legends: Final Cut", "ET: The Extra-Terrestrial", "Return of the Jedi", "Original Gangstas")
+
 #reorder the data frame and drop some non essental info
 df_movies_raw <- df_movies_raw %>% 
   select(title, year, distributor,
          worldwide_gross, worldwide_profit_gross, worldwide_adj, worldwide_profit_adj, worldwide_bits,        
          production_budget, production_budget_adj) %>% 
-  distinct(title, .keep_all = TRUE)
+  mutate(norm_title = toupper(title)) %>% 
+  distinct(norm_title, .keep_all = TRUE) %>% 
+  select(-norm_title) %>% 
+  filter(!(title %in% duplicate_titles))
+
+
+df_movies_raw$distributor[df_movies_raw$distributor %in% ' Company\", '] <- "Warner Bros."
+
+  
 
 df_movies_clean <- df_movies_raw
 
