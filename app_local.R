@@ -6,16 +6,17 @@ library(dash)
 library(dashCoreComponents)
 library(dashHtmlComponents)
 library(dashTable)
-library(tidyverse)
+library(tidyr)
+library(tidyselect)
+library(dplyr)
+library(ggplot2)
 library(plotly)
-library(gapminder)
 options(tidyverse.quiet = TRUE,
         repr.plot.width = 6,
         repr.plot.height = 5)
-
-library(ggridges) 
 library('scales')
-library(ggplot2)
+library(readr)
+library(purrr)
 
 
 app <- Dash$new(external_stylesheets = "https://codepen.io/chriddyp/pen/bWLwgP.css")
