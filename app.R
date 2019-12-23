@@ -227,13 +227,13 @@ make_graph_1 <- function(years=c(2000, 2010),
           axis.title.x = element_blank(),axis.text.y = element_text(color='#0d0d0d'))
   
   if(type == "jitter"){
-    ggplotly(p1, tooltip = "text") %>% config(displayModeBar = FALSE)
+    ggplotly(p1, tooltip = "text") %>% config(displayModeBar = FALSE) %>% layout(dragmode = FALSE)
   }
   else if(type == "total"){
-    ggplotly(p3, tooltip = "text") %>% config(displayModeBar = FALSE)
+    ggplotly(p3, tooltip = "text") %>% config(displayModeBar = FALSE) %>% layout(dragmode = FALSE)
   }
   else{
-    ggplotly(p2, tooltip = "text") %>% config(displayModeBar = FALSE)
+    ggplotly(p2, tooltip = "text") %>% config(displayModeBar = FALSE) %>% layout(dragmode = FALSE)
   }
 }
 
@@ -247,7 +247,7 @@ make_graph_1 <- function(years=c(2000, 2010),
 #######################################################################
 
 #bar plot
-make_graph_2 <- function(years=c(1980, 2017), 
+make_graph_2 <- function(years=c(1975, 2017), 
                          yaxis="worldwide_gross", inf="adj"){
   
   # gets the label matching the column value
@@ -293,14 +293,14 @@ make_graph_2 <- function(years=c(1980, 2017),
     #scale_x_continuous(breaks = unique(data$year))+
     scale_y_continuous(labels = comma) +
     xlab("") +
-    ylab(paste0("Worldwide ", y_label, " (Millions)")) +
+    ylab("") +
     coord_flip()+
     ggtitle(paste0("Top 10 Movies")) +
     theme(panel.border = element_blank(), panel.grid.major = element_blank(),panel.background = element_blank(),
           panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
           legend.position = "none",plot.title = element_text(hjust = 0.5, size=15),
           axis.text.x=element_text(size=12,color="#000000"),axis.text.y = element_text(color='#0d0d0d'))
-  ggplotly(p3, tooltip = "text") %>% config(displayModeBar = FALSE)
+  ggplotly(p3, tooltip = "text") %>% config(displayModeBar = FALSE) %>% layout(dragmode = FALSE)
 }
 
 #######################################################################
@@ -357,14 +357,14 @@ make_graph_3 <- function(yaxis="worldwide_gross", inf="adj",
     #scale_x_continuous(breaks = unique(data$year))+
     scale_y_continuous(labels = comma) +
     xlab("") +
-    ylab(paste0("Worldwide ", y_label, " (Millions)")) +
+    ylab("") +
     coord_flip() +
     ggtitle(paste0("Comparing Movies")) +
     theme(panel.border = element_blank(), panel.grid.major = element_blank(),panel.background = element_blank(),
           panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
           legend.position = "none", plot.title = element_text(hjust = 0.5, size=15),
           axis.text.x=element_text(size=12,color="#000000"),axis.text.y = element_text(color='#0d0d0d'))
-  ggplotly(p4, tooltip = "text") %>% config(p4, displayModeBar = FALSE)
+  ggplotly(p4, tooltip = "text") %>% config(p4, displayModeBar = FALSE) %>% layout(dragmode = FALSE)
 }
 
 ######################################################################
