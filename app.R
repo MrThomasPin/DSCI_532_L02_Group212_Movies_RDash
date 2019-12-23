@@ -414,7 +414,7 @@ app$layout(
               inflation_adj,
               dccMarkdown("**Select main chart type:**"),
               chart_type,
-              dccMarkdown("This application depicts the profit made by movies from 1980 to 2017."),
+              dccMarkdown("This application depicts the Box Office ticket sales and profit for movies from 1975 to 2017. Profits are Box Office tickets sales subtracted by production budgets."),
               dccMarkdown("*2017 movie data is incomplete."),
               dccMarkdown("An unconventional metric **_Butts in Seats_** is introduced. It indicates the estimated attendance of a movie.")
             ), style = list('background-color'='#94b8b8', 'columnCount'=1, 'width'='20%','padding'= '10px')
@@ -445,8 +445,8 @@ app$layout(
           )
         ), style = list('display'='flex')#, style = list('width'="20%", 'background-color'='lightgrey')
       ),
-      dccMarkdown("Data is from the vega dataset 'Movies'"),
-      dccMarkdown("[Source](https://raw.githubusercontent.com/vega/vega-datasets/master/data/movies.json)")
+      dccMarkdown("Data from multiple sources"),
+      dccMarkdown("[Sources](https://github.com/MrThomasPin/DSCI_532_L02_Group212_Movies_RDash/blob/master/data/data_set_links.md)")
       
     )
   )
