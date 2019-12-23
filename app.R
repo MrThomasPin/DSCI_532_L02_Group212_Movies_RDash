@@ -48,7 +48,7 @@ names(yearMarks) <- unique(df_movies$year)
 yearSlider <- dccRangeSlider(
   id="year",
   marks = yearMarks,
-  min = 1980,
+  min = 1975,
   max = 2017,
   step=5,
   value = list(2000, 2010)
@@ -155,8 +155,10 @@ make_graph_1 <- function(years=c(2000, 2010),
   
   if(yaxis %in% c("worldwide_profit_gross", "worldwide_profit_adj")){
     scaler = c(-100, -10, -1, -.1, .1 , 10, 100, 1000)
+    y_scale <- scale_y_continuous(labels = comma, trans=weird, 
+                       breaks = scaler)
   }
-  else scaler = c(10, 100, 1000)
+  else y_scale <- scale_y_continuous(labels = comma, trans="log10")
   
   
   y_label <- yaxisKey$label[yaxisKey$value==yaxis_to_plot]
@@ -180,8 +182,7 @@ make_graph_1 <- function(years=c(2000, 2010),
                                       '</br>', y_label,"(M): ", round(!!sym(yaxis_to_plot), 2)))) +
     geom_jitter(alpha=.5, size =0.7, color= "#ff8000") +
     scale_x_continuous(breaks = unique(data$year))+
-    scale_y_continuous(labels = comma, trans=weird, 
-                       breaks = scaler) +
+    y_scale +
     xlab("Year") +
     ylab(paste0("Worldwide ", y_label, " (Millions) - log(10) scale")) +
     geom_line(aes(x=year, y=median(!!sym(yaxis_to_plot)))) +
@@ -397,7 +398,7 @@ app$layout(
     list(
       htmlDiv(
         list(
-          htmlH3("Group 212"),
+          #htmlH3("Group 212"),
           htmlH2("M is for Movies!")
           #htmlH4("Smaller Text")
         ), style = list('columnCount'=2, 'background-color'= '#669999','padding'= '15px 10px')
